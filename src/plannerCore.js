@@ -155,10 +155,17 @@ export function parseNaturalInput(query = '') {
     budget = parseFloat(lakhMatch[1]) * 100000;
     currency = 'INR';
   } else {
-    const rawBudgetMatch = q.match(/(?:budget\s*(?:is|of|around)?\s*|for\s*)?(?:₹|\$|€|£)?\s*(\d+[\d,]*)\s*(?:dollars?|bucks?|inr|rupees?)?/i);
-    if (rawBudgetMatch && rawBudgetMatch[1]) {
-      const parsedNum = parseInt(rawBudgetMatch[1].replace(/,/g, ''), 10);
-      if (parsedNum >= 50 && parsedNum <= 50000000) {
+    // 1. Explicit currency symbol with digits, e.g. $500, ₹50,000, £2000
+    const symbolMatch = q.match(/(?:₹|\$|€|£)\s*(\d+[\d,]*)/);
+    // 2. Explicit keyword, e.g. "budget is 1000", "budget 50000"
+    const keywordMatch = q.match(/budget\s*(?:is|of|around|:)?\s*(?:₹|\$|€|£)?\s*(\d+[\d,]*)/i);
+    // 3. Suffix keyword, e.g. "500 dollars", "50000 inr", "2000 bucks"
+    const suffixMatch = q.match(/(\d+[\d,]*)\s*(?:dollars?|bucks?|inr|rupees?|rs)/i);
+
+    const budgetCandidate = symbolMatch || keywordMatch || suffixMatch;
+    if (budgetCandidate && budgetCandidate[1]) {
+      const parsedNum = parseInt(budgetCandidate[1].replace(/,/g, ''), 10);
+      if (parsedNum >= 10 && parsedNum <= 100000000) {
         budget = parsedNum;
       }
     }
@@ -167,8 +174,7 @@ export function parseNaturalInput(query = '') {
   // Check tiny budget / volunteers only
   if (/tiny budget|volunteer|zero budget|no budget|sponsors? only/i.test(q)) {
     isVolunteersOnly = true;
-    if (budget > 15000 && currency === 'INR') budget = 10000;
-    if (budget > 300 && currency !== 'INR') budget = 150;
+    budget = (currency === 'INR' ? 10000 : 250);
   }
 
   // Detect city/location
