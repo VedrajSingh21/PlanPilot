@@ -1,6 +1,23 @@
 // Server-Side Gemini API Proxy for PlanPilot
 import { GoogleGenAI } from '@google/genai';
+import fs from 'fs';
+import path from 'path';
 import { PlanSchema, generateSmartPlan } from '../src/plannerCore.js';
+
+function getApiKey() {
+  if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+  try {
+    const envPath = path.resolve(process.cwd(), '.env');
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, 'utf8');
+      const match = content.match(/GEMINI_API_KEY\s*=\s*([^\r\n]+)/);
+      if (match) return match[1].trim();
+    }
+  } catch (e) {
+    // ignore
+  }
+  return '';
+}
 
 export function createGeminiProxy() {
   return {
@@ -13,7 +30,7 @@ export function createGeminiProxy() {
           req.on('end', async () => {
             try {
               const data = JSON.parse(body || '{}');
-              const apiKey = process.env.GEMINI_API_KEY || req.headers['x-gemini-api-key'] || '';
+              const apiKey = getApiKey() || req.headers['x-gemini-api-key'] || '';
 
               if (!apiKey) {
                 // Fallback directly to deterministic planner
@@ -28,12 +45,14 @@ export function createGeminiProxy() {
                 const ai = new GoogleGenAI({ apiKey });
                 const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
-                const systemInstruction = `You are PlanPilot, an expert event planner for weddings, birthdays, and community events (fundraisers, festivals, meetups, school/NGO events). Be warm, organized and practical. Never invent specific vendor names, phone numbers or exact prices as facts; give typical price RANGES labeled as estimates and advise getting 2-3 quotes. Budgets must add up exactly to the stated total and include a 5-10% contingency. If details are missing, state assumptions and still produce a full plan. Respect culture, religion, dietary needs, accessibility and age-appropriateness; offer options rather than assuming traditions. Flag permits, licenses, crowd safety and alcohol laws for public events or alcohol service. Infer currency and locale; do not default to USD. If the budget is unrealistic for the guest count, say so plainly, give a rough per-head figure, and offer options (smaller guest list, daytime or home venue, potluck-style menu). For near-zero-budget community events, switch to an in-kind donations, sponsors and volunteers model instead of a normal budget table. Decline unsafe or illegal requests briefly and offer a safe alternative.
-
-Follow these event-type default allocations:
-Wedding: venue+catering 45-50%, photo/video 10-12%, attire/beauty 8-10%, decor/flowers 8-10%, music 6-8%, stationery/misc 4-5%, contingency 8-10%.
-Birthday: venue/food 50-55%, decor/theme 15%, entertainment 15%, cake/favors 8%, contingency 7-10%.
-Community: venue/permits 20-25%, food 25%, marketing 10-15%, equipment/AV 15%, volunteers/safety/insurance 10%, contingency 10%.`;
+                const systemInstruction = `You are PlanPilot, an expert event planner for weddings, birthdays, and community events (fundraisers, festivals, meetups, school/NGO events). Be warm, organized and practical.
+- Never invent specific vendor names, phone numbers or exact prices as facts; give typical price RANGES labeled as estimates and advise getting 2-3 quotes.
+- Budgets must add up exactly to the stated total and include a 5-10% contingency line.
+- Respect culture, religion, dietary needs, accessibility and age-appropriateness.
+- Flag permits, licenses, crowd safety and alcohol laws for public events or alcohol service.
+- If the budget is unrealistic for the headcount, state so plainly in snapshot.realityCheck (isUnrealistic=true, perHead, message, suggestions).
+- For near-zero-budget community events, switch to an in-kind donations, sponsors and volunteer pods model (isVolunteersOnly=true).
+- Return pure valid JSON conforming strictly to the requested schema.`;
 
                 const prompt = `Generate a complete event plan for:
 Event: ${data.eventType || 'celebration'}
@@ -44,7 +63,45 @@ Timing: ${data.timing || '1-3 months'}
 Mode: ${data.mode || 'balanced'}
 Vibe & Details: ${data.freeText || data.vibe || 'Warm celebratory event'}
 
-Output pure JSON matching the requested schema. Ensure all budget category amounts sum up to EXACTLY ${data.budget || 150000}.`;
+Return pure JSON matching this exact structure:
+{
+  "snapshot": {
+    "eventType": "${data.eventType || 'wedding'}",
+    "eventName": "Event Name",
+    "tagline": "A short elegant tagline",
+    "guests": ${data.guests || 50},
+    "totalBudget": ${data.budget || 150000},
+    "currency": "${data.currency || 'INR'}",
+    "timingText": "${data.timing || '1-3 months'}",
+    "location": "${data.location || 'Local'}",
+    "vibe": "Warm elegant ambiance",
+    "mode": "${data.mode || 'balanced'}",
+    "realityCheck": { "isUnrealistic": false, "perHead": 0, "message": "", "suggestions": [] }
+  },
+  "assumptions": ["Assumed 150 guests", "Estimated at local venue", "Includes 10% contingency reserve"],
+  "budget": [
+    { "id": "b1", "category": "Venue & Catering", "percent": 45, "amount": 0, "tip": "Savings tip" }
+  ],
+  "timeline": [
+    { "phase": "This Month", "isThisWeek": true, "tasks": [{ "id": "t1", "text": "Task description", "completed": false }] }
+  ],
+  "vendorChecklist": [
+    { "category": "Catering", "items": [{ "id": "vc1", "task": "Check license", "tag": "Ask", "completed": false }] }
+  ],
+  "ideas": [
+    { "title": "Concept title", "desc": "Concept description", "type": "theme" }
+  ],
+  "savingIdeas": [
+    { "title": "Saving alternative 1", "desc": "Description" }
+  ],
+  "risks": [
+    { "risk": "Identified risk", "mitigation": "Mitigation strategy" }
+  ],
+  "nextSteps": ["Step 1", "Step 2", "Step 3"],
+  "inviteText": { "formal": "Draft 1", "casual": "Draft 2", "whatsapp": "Draft 3" }
+}
+
+CRITICAL: Every budget item amount must sum up to EXACTLY ${data.budget || 150000}.`;
 
                 const response = await ai.models.generateContent({
                   model: modelName,
@@ -57,7 +114,7 @@ Output pure JSON matching the requested schema. Ensure all budget category amoun
 
                 const rawJson = JSON.parse(response.text.trim());
                 
-                // Validate & reconcile budget math
+                // Reconcile budget math to guarantee exact match
                 let reconciledPlan = reconcileBudgetMath(rawJson, data.budget);
 
                 res.setHeader('Content-Type', 'application/json');
@@ -83,6 +140,7 @@ Output pure JSON matching the requested schema. Ensure all budget category amoun
             try {
               const data = JSON.parse(body || '{}');
               const { refinement, currentPlan } = data;
+              const apiKey = getApiKey() || req.headers['x-gemini-api-key'] || '';
 
               // Apply refinement to plan
               let updatedPlan = JSON.parse(JSON.stringify(currentPlan));
@@ -96,31 +154,42 @@ Output pure JSON matching the requested schema. Ensure all budget category amoun
                   mode: 'budgetSaver',
                   assumptionsOverride: [...updatedPlan.assumptions, 'Budget trimmed by 15%']
                 });
-              } else if (r.includes('rush') || r.includes('2-month') || r.includes('fast')) {
-                updatedPlan = generateSmartPlan({
-                  ...updatedPlan.snapshot,
-                  budget: updatedPlan.snapshot.totalBudget,
-                  timing: 'under_3_weeks',
-                  mode: 'lastMinute',
-                  assumptionsOverride: [...updatedPlan.assumptions, 'Converted to expedited 2-month rush timeline']
-                });
-              } else if (r.includes('vegetarian') || r.includes('jain')) {
-                updatedPlan.snapshot.culturalNotice = 'Dietary Guarantee: 100% Strict Pure Vegetarian & Jain Catering (No onion, garlic, or root vegetables on designated counter; separate segregated cookware & serving spoons).';
-                updatedPlan.vendorChecklist.find(c => c.category.includes('Catering'))?.items.unshift({
-                  id: 'jain1',
-                  task: 'Contractually bind caterer to pure vegetarian/Jain kitchen segregation with separate oil and ladles.',
-                  tag: 'Contract',
-                  completed: true
-                });
-              } else if (r.includes('rain') || r.includes('outdoor')) {
-                updatedPlan.risks.unshift({
-                  risk: 'Outdoor Rain or Windstorm Vulnerability',
-                  mitigation: 'Mandatory 48-hour waterproof German marquee/pagoda tent standby clause with sealed raised wooden flooring.'
-                });
+              } else if (apiKey) {
+                // Call Gemini for smart refinement if key exists
+                try {
+                  const ai = new GoogleGenAI({ apiKey });
+                  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+
+                  const refinePrompt = `You are PlanPilot event planner. The user wants to refine their event blueprint:
+Refinement request: "${refinement}"
+Current event snapshot:
+Event: ${updatedPlan.snapshot.eventName} (${updatedPlan.snapshot.eventType})
+Guests: ${updatedPlan.snapshot.guests}
+Budget: ${updatedPlan.snapshot.currency} ${updatedPlan.snapshot.totalBudget}
+
+Please update the plan accordingly. Keep the total budget equal to ${updatedPlan.snapshot.totalBudget}.
+Output pure JSON matching the PlanSchema.`;
+
+                  const resp = await ai.models.generateContent({
+                    model: modelName,
+                    contents: refinePrompt,
+                    config: { responseMimeType: 'application/json' }
+                  });
+
+                  const parsedUpdated = JSON.parse(resp.text.trim());
+                  if (parsedUpdated && parsedUpdated.snapshot && parsedUpdated.budget) {
+                    updatedPlan = reconcileBudgetMath(parsedUpdated, updatedPlan.snapshot.totalBudget);
+                  }
+                } catch {
+                  // Fallback: append note
+                  updatedPlan.assumptions.push(`Refined: ${refinement}`);
+                }
+              } else {
+                updatedPlan.assumptions.push(`Refined: ${refinement}`);
               }
 
               res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ ok: true, source: 'refine', plan: updatedPlan }));
+              res.end(JSON.stringify({ ok: true, source: 'gemini-refine', plan: updatedPlan }));
             } catch (err) {
               res.statusCode = 500;
               res.end(JSON.stringify({ ok: false, error: err.message }));
@@ -139,17 +208,16 @@ function reconcileBudgetMath(plan, targetBudget) {
   if (!plan || !plan.budget || !Array.isArray(plan.budget)) return plan;
   const numBudget = Number(targetBudget) || 150000;
 
-  let currentSum = plan.budget.reduce((acc, row) => acc + (Number(row.amount) || 0), 0);
-  let diff = numBudget - currentSum;
-
-  if (diff !== 0) {
-    // Adjust contingency or largest item
-    let targetRow = plan.budget.find(r => /contingency|incidentals|buffer/i.test(r.category)) || plan.budget[0];
-    if (targetRow) {
-      targetRow.amount = Math.max(0, targetRow.amount + diff);
-      targetRow.percent = Math.round((targetRow.amount / numBudget) * 100);
+  // Ensure every item has an integer amount
+  let running = 0;
+  plan.budget.forEach((row, i) => {
+    if (i === plan.budget.length - 1) {
+      row.amount = numBudget - running;
+    } else {
+      row.amount = Math.round((numBudget * (row.percent || 10)) / 100);
+      running += row.amount;
     }
-  }
+  });
 
   return plan;
 }
