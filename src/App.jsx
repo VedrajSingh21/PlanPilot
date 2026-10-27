@@ -319,7 +319,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FBF8F3] text-[#2B2A33] font-sans antialiased">
+    <div className="min-h-screen flex flex-col bg-bg text-text font-sans antialiased">
       {/* 1. NAVBAR (Fixed at top, 64px tall, only 2 items on right) */}
       <Navbar
         onNewPlan={() => {
@@ -390,8 +390,8 @@ export default function App() {
 
       {/* Subtle Toast Alert */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#2B2A33] text-white px-4 py-2.5 rounded-xl shadow-[0_8px_30px_rgba(43,42,51,0.2)] text-xs font-medium flex items-center gap-2 animate-fade-in pointer-events-none">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#D9695F]" />
+        <div className="fixed bottom-6 right-6 z-50 bg-text text-white px-4 py-2.5 rounded-xl shadow-[0_8px_30px_rgba(43,42,51,0.2)] text-xs font-medium flex items-center gap-2 animate-fade-in pointer-events-none">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           <span>{toastMessage}</span>
         </div>
       )}

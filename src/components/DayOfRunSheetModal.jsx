@@ -49,19 +49,19 @@ export default function DayOfRunSheetModal({ isOpen, onClose, eventType, onCopyT
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#2B2A33]/40 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl border border-[#EDE4DB] shadow-[0_16px_40px_rgba(91,58,87,0.15)] max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden animate-scale-up">
+    <div className="fixed inset-0 z-50 bg-text/40 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl border border-border shadow-[0_16px_40px_rgba(91,58,87,0.15)] max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden animate-scale-up">
         {/* Header */}
-        <div className="p-5 border-b border-[#EDE4DB] flex items-center justify-between bg-[#FBF8F3]">
+        <div className="p-5 border-b border-border flex items-center justify-between bg-bg">
           <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-[#D9695F]" />
-            <h3 className="font-serif text-xl font-bold text-[#2B2A33]">
+            <Clock className="w-5 h-5 text-primary" />
+            <h3 className="font-serif text-xl font-bold text-text">
               🕒 Master Day-Of Run Sheet
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-[#6E6A78] hover:text-[#2B2A33] hover:bg-[#F7EFE8] transition"
+            className="p-1 rounded-lg text-text-muted hover:text-text hover:bg-surface-soft transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -69,18 +69,18 @@ export default function DayOfRunSheetModal({ isOpen, onClose, eventType, onCopyT
 
         {/* Content */}
         <div className="p-5 overflow-y-auto space-y-2.5 flex-1">
-          <p className="text-xs text-[#6E6A78] mb-3">
+          <p className="text-xs text-text-muted mb-3">
             Hour-by-hour choreography to keep hosts, coordinators, and venue staff synchronized without panic.
           </p>
           {currentSchedule.map((item, idx) => (
             <div
               key={idx}
-              className="p-3 rounded-xl bg-[#F7EFE8]/50 border border-[#EDE4DB] flex items-start gap-3 text-xs sm:text-sm"
+              className="p-3 rounded-xl bg-surface-soft/50 border border-border flex items-start gap-3 text-xs sm:text-sm"
             >
-              <span className="font-mono font-bold text-[#D9695F] shrink-0 w-20">
+              <span className="font-mono font-bold text-primary shrink-0 w-20">
                 {item.time}
               </span>
-              <span className="text-[#2B2A33] font-medium leading-relaxed">
+              <span className="text-text font-medium leading-relaxed">
                 {item.event}
               </span>
             </div>
@@ -88,17 +88,17 @@ export default function DayOfRunSheetModal({ isOpen, onClose, eventType, onCopyT
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-[#EDE4DB] bg-[#FBF8F3] flex justify-between items-center text-xs">
+        <div className="p-4 border-t border-border bg-bg flex justify-between items-center text-xs">
           <button
             onClick={copySchedule}
-            className="px-4 py-2 rounded-xl bg-[#F6DFDB] hover:bg-[#D9695F] hover:text-white font-medium text-[#B9524A] transition flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-blush hover:bg-primary hover:text-white font-medium text-primary-dark transition flex items-center gap-1.5 cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>Copy Run Sheet</span>
           </button>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white border border-[#EDE4DB] font-medium text-[#2B2A33] hover:bg-[#F7EFE8] transition cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-white border border-border font-medium text-text hover:bg-surface-soft transition cursor-pointer"
           >
             Close
           </button>

@@ -38,20 +38,20 @@ export default function SmartIntake({
 
   return (
     <section id="intake-card" className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
-      <div className="bg-white rounded-3xl border border-[#EDE4DB] p-6 sm:p-9 shadow-[0_8px_30px_rgba(91,58,87,0.06)] relative overflow-hidden">
+      <div className="bg-white rounded-3xl border border-border p-6 sm:p-9 shadow-[0_8px_30px_rgba(91,58,87,0.06)] relative overflow-hidden">
         {/* Soft top gradient bar */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#D9695F] via-[#F6DFDB] to-[#C9A25B]" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-linear-to-r from-primary via-blush to-accent-gold" />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-7 pb-5 border-b border-[#EDE4DB]">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-7 pb-5 border-b border-border">
           <div>
-            <h2 className="font-serif text-2xl font-bold text-[#2B2A33]">
+            <h2 className="font-serif text-2xl font-bold text-text">
               Tell PlanPilot About Your Celebration
             </h2>
-            <p className="text-sm text-[#6E6A78] mt-0.5">
+            <p className="text-sm text-text-muted mt-0.5">
               Select what you know, or leave blanks—we'll make realistic assumptions you can tweak anytime.
             </p>
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#F7EFE8] text-[#5B3A57] border border-[#EDE4DB]">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-surface-soft text-plum border border-border">
             Single-Card Smart Intake
           </span>
         </div>
@@ -59,7 +59,7 @@ export default function SmartIntake({
         <form onSubmit={onSubmit} className="space-y-6">
           {/* 1. Event Type Chips */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#6E6A78] mb-2.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2.5">
               1. Event Type
             </label>
             <div className="flex flex-wrap gap-2.5">
@@ -72,8 +72,8 @@ export default function SmartIntake({
                     onClick={() => onChange('eventType', t.id)}
                     className={`px-4 py-2.5 rounded-2xl text-sm font-medium transition-all flex items-center gap-2 cursor-pointer ${
                       active
-                        ? 'bg-[#D9695F] text-white shadow-[0_4px_14px_rgba(217,105,95,0.25)] border-transparent'
-                        : 'bg-[#F7EFE8] text-[#2B2A33] border border-[#EDE4DB] hover:bg-[#F6DFDB]'
+                        ? 'bg-primary text-white shadow-[0_4px_14px_rgba(217,105,95,0.25)] border-transparent'
+                        : 'bg-surface-soft text-text border border-border hover:bg-blush'
                     }`}
                   >
                     <span>{t.label}</span>
@@ -89,11 +89,11 @@ export default function SmartIntake({
             {/* Guests */}
             <div>
               <div className="flex items-center justify-between mb-2.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#6E6A78] flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-[#D9695F]" />
+                <label className="text-xs font-semibold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-primary" />
                   2. Guest Count
                 </label>
-                <span className="text-sm font-bold text-[#2B2A33]">
+                <span className="text-sm font-bold text-text">
                   {form.guests} Guests
                 </span>
               </div>
@@ -107,8 +107,8 @@ export default function SmartIntake({
                       onClick={() => onChange('guests', g.value)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                         active
-                          ? 'bg-[#2B2A33] text-white'
-                          : 'bg-[#F7EFE8] text-[#6E6A78] hover:bg-[#F6DFDB]'
+                          ? 'bg-text text-white'
+                          : 'bg-surface-soft text-text-muted hover:bg-blush'
                       }`}
                     >
                       {g.label}
@@ -123,22 +123,22 @@ export default function SmartIntake({
                 step="5"
                 value={form.guests}
                 onChange={e => onChange('guests', parseInt(e.target.value, 10))}
-                className="w-full accent-[#D9695F] cursor-pointer"
+                className="w-full accent-primary cursor-pointer"
               />
             </div>
 
             {/* Budget */}
             <div>
               <div className="flex items-center justify-between mb-2.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#6E6A78] flex items-center gap-1.5">
-                  <DollarSign className="w-3.5 h-3.5 text-[#C9A25B]" />
+                <label className="text-xs font-semibold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                  <DollarSign className="w-3.5 h-3.5 text-accent-gold" />
                   3. Total Target Budget
                 </label>
                 <div className="flex items-center gap-1.5">
                   <select
                     value={form.currency}
                     onChange={e => onChange('currency', e.target.value)}
-                    className="text-xs font-semibold bg-[#F7EFE8] border border-[#EDE4DB] rounded-lg px-2 py-1 text-[#2B2A33] outline-none cursor-pointer"
+                    className="text-xs font-semibold bg-surface-soft border border-border rounded-lg px-2 py-1 text-text outline-none cursor-pointer"
                   >
                     <option value="INR">₹ INR</option>
                     <option value="USD">$ USD</option>
@@ -150,7 +150,7 @@ export default function SmartIntake({
                 </div>
               </div>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-serif text-lg font-bold text-[#6E6A78]">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-serif text-lg font-bold text-text-muted">
                   {CURRENCY_SYMBOLS[form.currency] || '$'}
                 </span>
                 <input
@@ -160,10 +160,10 @@ export default function SmartIntake({
                   value={form.budget}
                   onChange={e => onChange('budget', Math.max(0, parseInt(e.target.value, 10) || 0))}
                   placeholder="Enter budget ceiling"
-                  className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-[#F7EFE8]/70 border border-[#EDE4DB] focus:border-[#D9695F] focus:bg-white text-[#2B2A33] font-semibold text-base outline-none transition"
+                  className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-surface-soft/70 border border-border focus:border-primary focus:bg-white text-text font-semibold text-base outline-none transition"
                 />
               </div>
-              <p className="text-[11px] text-[#6E6A78] mt-1.5">
+              <p className="text-[11px] text-text-muted mt-1.5">
                 ~{CURRENCY_SYMBOLS[form.currency] || '$'}{Math.round(form.budget / (form.guests || 1))} per guest average
               </p>
             </div>
@@ -172,7 +172,7 @@ export default function SmartIntake({
           {/* 3. Timing Chips & Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#6E6A78] mb-2.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2.5">
                 4. Timeline Horizon
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -185,8 +185,8 @@ export default function SmartIntake({
                       onClick={() => onChange('timing', t.id)}
                       className={`px-3 py-2 rounded-xl text-xs font-medium transition-all text-left cursor-pointer ${
                         active
-                          ? 'bg-[#2B2A33] text-white shadow-xs'
-                          : 'bg-[#F7EFE8] text-[#2B2A33] border border-[#EDE4DB] hover:bg-[#F6DFDB]'
+                          ? 'bg-text text-white shadow-xs'
+                          : 'bg-surface-soft text-text border border-border hover:bg-blush'
                       }`}
                     >
                       {t.label}
@@ -197,27 +197,27 @@ export default function SmartIntake({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#6E6A78] mb-2.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2.5">
                 City / Region &amp; Date (Optional)
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <div className="relative">
-                  <MapPin className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#6E6A78]" />
+                  <MapPin className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                   <input
                     type="text"
                     value={form.location}
                     onChange={e => onChange('location', e.target.value)}
                     placeholder="e.g. Jaipur, Pune, NY"
-                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl bg-[#F7EFE8]/70 border border-[#EDE4DB] focus:bg-white outline-none"
+                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl bg-surface-soft/70 border border-border focus:bg-white outline-none"
                   />
                 </div>
                 <div className="relative">
-                  <Calendar className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#6E6A78]" />
+                  <Calendar className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                   <input
                     type="date"
                     value={form.date || ''}
                     onChange={e => onChange('date', e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl bg-[#F7EFE8]/70 border border-[#EDE4DB] focus:bg-white outline-none"
+                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl bg-surface-soft/70 border border-border focus:bg-white outline-none"
                   />
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function SmartIntake({
 
           {/* 4. Free-Text Vibe, Theme, Dietary, Accessibility */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#6E6A78] mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
               Vibe, Theme, Culture, Dietary or Accessibility Needs
             </label>
             <textarea
@@ -234,14 +234,14 @@ export default function SmartIntake({
               value={form.freeText}
               onChange={e => onChange('freeText', e.target.value)}
               placeholder="e.g. Royal heritage Rajasthani sangeet, pure vegetarian & Jain food needed, wheelchair ramp at venue, sunset pheras..."
-              className="w-full p-3.5 rounded-2xl bg-[#F7EFE8]/50 border border-[#EDE4DB] focus:border-[#D9695F] focus:bg-white text-sm text-[#2B2A33] outline-none transition resize-none placeholder:text-[#6E6A78]/70"
+              className="w-full p-3.5 rounded-2xl bg-surface-soft/50 border border-border focus:border-primary focus:bg-white text-sm text-text outline-none transition resize-none placeholder:text-text-muted/70"
             />
           </div>
 
           {/* 5. Planning Mode Toggle */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#6E6A78] mb-2.5 flex items-center gap-1.5">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-[#5B3A57]" />
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2.5 flex items-center gap-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-plum" />
               Planning Mode
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -254,12 +254,12 @@ export default function SmartIntake({
                     onClick={() => onChange('mode', m.id)}
                     className={`p-3 rounded-2xl text-left transition-all border cursor-pointer ${
                       active
-                        ? 'bg-[#FBF8F3] border-[#D9695F] shadow-xs ring-1 ring-[#D9695F]'
-                        : 'bg-[#F7EFE8]/60 border-[#EDE4DB] hover:bg-[#F6DFDB]/50'
+                        ? 'bg-bg border-primary shadow-xs ring-1 ring-primary'
+                        : 'bg-surface-soft/60 border-border hover:bg-blush/50'
                     }`}
                   >
-                    <div className="font-semibold text-xs text-[#2B2A33] mb-0.5">{m.label}</div>
-                    <div className="text-[10px] text-[#6E6A78] leading-tight">{m.desc}</div>
+                    <div className="font-semibold text-xs text-text mb-0.5">{m.label}</div>
+                    <div className="text-[10px] text-text-muted leading-tight">{m.desc}</div>
                   </button>
                 );
               })}
@@ -271,7 +271,7 @@ export default function SmartIntake({
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 rounded-2xl bg-[#D9695F] hover:bg-[#B9524A] text-white font-medium text-base shadow-[0_8px_24px_rgba(217,105,95,0.25)] hover:shadow-[0_12px_28px_rgba(217,105,95,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-4 rounded-2xl bg-primary hover:bg-primary-dark text-white font-medium text-base shadow-[0_8px_24px_rgba(217,105,95,0.25)] hover:shadow-[0_12px_28px_rgba(217,105,95,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>

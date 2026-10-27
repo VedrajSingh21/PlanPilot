@@ -1,22 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Download,
-  Share2,
-  FileText,
   Copy,
   Mail,
   Printer,
   ChevronDown,
   Sparkles,
   ArrowUpRight,
-  AlertTriangle,
-  Info,
-  X,
-  CheckCircle,
-  Clock,
-  MapPin,
-  Users,
-  DollarSign
+  X
 } from 'lucide-react';
 import BudgetTab from './tabs/BudgetTab.jsx';
 import TimelineTab from './tabs/TimelineTab.jsx';
@@ -72,21 +63,21 @@ export default function PlanState({
       icon: '🤝',
       title: 'Grassroots Event:',
       text: 'Commercial vendor allocations swapped for volunteer coordinator pods and community sponsorships.',
-      style: 'bg-[#DCE8DA]/60 border-[#DCE8DA] text-[#2B2A33]'
+      style: 'bg-sage/60 border-sage text-text'
     };
   } else if (snapshot.alcoholNotice) {
     singleEdgeNotice = {
       icon: '🍷',
       title: 'Permit Flag:',
       text: snapshot.alcoholNotice,
-      style: 'bg-[#F6DFDB]/60 border-[#D9695F]/30 text-[#B9524A]'
+      style: 'bg-blush/60 border-primary/30 text-primary-dark'
     };
   } else if (snapshot.culturalNotice) {
     singleEdgeNotice = {
       icon: '🪔',
       title: 'Cultural Timing:',
       text: snapshot.culturalNotice,
-      style: 'bg-[#FBF8F3] border-[#C9A25B]/40 text-[#2B2A33]'
+      style: 'bg-bg border-accent-gold/40 text-text'
     };
   }
 
@@ -109,24 +100,24 @@ export default function PlanState({
   };
 
   return (
-    <div className="max-w-[960px] mx-auto px-4 sm:px-6 pt-6 pb-20">
+    <div className="max-w-240 mx-auto px-4 sm:px-6 pt-6 pb-20">
       {/* 1. PAGE HEADER */}
-      <div className="mb-6 pb-5 border-b border-[#EDE4DB]">
+      <div className="mb-6 pb-5 border-b border-border">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#2B2A33] mb-1.5">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-text mb-1.5">
               {snapshot.eventName || 'Your Event Blueprint'}
             </h1>
 
             {/* One-line snapshot */}
-            <p className="text-xs sm:text-sm text-[#6E6A78] flex flex-wrap items-center gap-1.5 font-medium">
+            <p className="text-xs sm:text-sm text-text-muted flex flex-wrap items-center gap-1.5 font-medium">
               <span className="capitalize">{snapshot.eventType}</span>
               <span>•</span>
               <span>{snapshot.location || 'Local'}</span>
               <span>•</span>
               <span>{snapshot.guests} guests</span>
               <span>•</span>
-              <span className="font-semibold text-[#D9695F]">{formatCurrency(snapshot.totalBudget, snapshot.currency)}</span>
+              <span className="font-semibold text-primary">{formatCurrency(snapshot.totalBudget, snapshot.currency)}</span>
               <span>•</span>
               <span>{snapshot.timingText || 'Upcoming'}</span>
             </p>
@@ -137,24 +128,24 @@ export default function PlanState({
             <button
               type="button"
               onClick={() => setExportMenuOpen(!exportMenuOpen)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-[#EDE4DB] text-xs sm:text-sm font-semibold text-[#2B2A33] hover:bg-[#F7EFE8] shadow-2xs transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-border text-xs sm:text-sm font-semibold text-text hover:bg-surface-soft shadow-2xs transition cursor-pointer"
             >
-              <Download className="w-4 h-4 text-[#D9695F]" />
+              <Download className="w-4 h-4 text-primary" />
               <span>Export</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#6E6A78]" />
+              <ChevronDown className="w-3.5 h-3.5 text-text-muted" />
             </button>
 
             {exportMenuOpen && (
-              <div className="absolute right-0 mt-2 w-52 rounded-[20px] bg-white border border-[#EDE4DB] shadow-[0_8px_30px_rgba(91,58,87,0.12)] p-2 z-50 animate-fade-in text-xs">
+              <div className="absolute right-0 mt-2 w-52 rounded-[20px] bg-white border border-border shadow-[0_8px_30px_rgba(91,58,87,0.12)] p-2 z-50 animate-fade-in text-xs">
                 <button
                   type="button"
                   onClick={() => {
                     setExportMenuOpen(false);
                     window.print();
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-[#2B2A33] hover:bg-[#F7EFE8] transition cursor-pointer"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-text hover:bg-surface-soft transition cursor-pointer"
                 >
-                  <Printer className="w-4 h-4 text-[#6E6A78]" />
+                  <Printer className="w-4 h-4 text-text-muted" />
                   <span>Print / Save as PDF</span>
                 </button>
 
@@ -164,9 +155,9 @@ export default function PlanState({
                     setExportMenuOpen(false);
                     onCopyText();
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-[#2B2A33] hover:bg-[#F7EFE8] transition cursor-pointer"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-text hover:bg-surface-soft transition cursor-pointer"
                 >
-                  <Copy className="w-4 h-4 text-[#6E6A78]" />
+                  <Copy className="w-4 h-4 text-text-muted" />
                   <span>Copy Markdown text</span>
                 </button>
 
@@ -176,13 +167,13 @@ export default function PlanState({
                     setExportMenuOpen(false);
                     onOpenInvite();
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-[#2B2A33] hover:bg-[#F7EFE8] transition cursor-pointer"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-text hover:bg-surface-soft transition cursor-pointer"
                 >
-                  <Mail className="w-4 h-4 text-[#6E6A78]" />
+                  <Mail className="w-4 h-4 text-text-muted" />
                   <span>Copy invitation copy</span>
                 </button>
 
-                <div className="border-t border-[#EDE4DB] my-1" />
+                <div className="border-t border-border my-1" />
 
                 <button
                   type="button"
@@ -190,9 +181,9 @@ export default function PlanState({
                     setExportMenuOpen(false);
                     onSavePlan();
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-[#D9695F] hover:bg-[#F6DFDB]/50 transition cursor-pointer"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left font-medium text-primary hover:bg-blush/50 transition cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-[#D9695F]" />
+                  <Sparkles className="w-4 h-4 text-primary" />
                   <span>Save to My Plans</span>
                 </button>
               </div>
@@ -203,19 +194,19 @@ export default function PlanState({
         {/* Small Editable Assumption Chips */}
         {assumptions && assumptions.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5 mt-3">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6A78] mr-1">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mr-1">
               Assumptions:
             </span>
             {assumptions.map((assump, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#F7EFE8] text-[11px] font-medium text-[#2B2A33] border border-[#EDE4DB]"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-soft text-[11px] font-medium text-text border border-border"
               >
                 <span>{assump}</span>
                 <button
                   type="button"
                   onClick={() => onDismissAssumption(idx)}
-                  className="text-[#6E6A78] hover:text-[#D9695F] ml-0.5 cursor-pointer"
+                  className="text-text-muted hover:text-primary ml-0.5 cursor-pointer"
                   title="Remove assumption"
                 >
                   <X className="w-2.5 h-2.5" />
@@ -238,13 +229,13 @@ export default function PlanState({
 
       {/* 3. NEXT 3 STEPS (Single soft card ABOVE the tabs) */}
       {nextSteps && nextSteps.length > 0 && (
-        <div className="mb-6 p-4 sm:p-5 rounded-[20px] bg-[#F7EFE8]/70 border border-[#EDE4DB] shadow-2xs">
+        <div className="mb-6 p-4 sm:p-5 rounded-[20px] bg-surface-soft/70 border border-border shadow-2xs">
           <div className="flex items-center justify-between mb-2.5">
-            <h2 className="font-serif text-sm sm:text-base font-bold text-[#2B2A33] flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#D9695F]" />
+            <h2 className="font-serif text-sm sm:text-base font-bold text-text flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary" />
               <span>Next 3 Steps (Execute this week)</span>
             </h2>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6E6A78]">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">
               High Impact
             </span>
           </div>
@@ -253,12 +244,12 @@ export default function PlanState({
             {nextSteps.slice(0, 3).map((step, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-xl bg-white border border-[#EDE4DB] flex items-start gap-2.5"
+                className="p-3 rounded-xl bg-white border border-border flex items-start gap-2.5"
               >
-                <div className="w-5 h-5 rounded-md bg-[#F6DFDB] text-[#B9524A] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-5 h-5 rounded-md bg-blush text-primary-dark font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   {idx + 1}
                 </div>
-                <p className="text-xs text-[#2B2A33] font-medium leading-relaxed">
+                <p className="text-xs text-text font-medium leading-relaxed">
                   {step}
                 </p>
               </div>
@@ -268,7 +259,7 @@ export default function PlanState({
       )}
 
       {/* 4. ONE ROW OF SIMPLE TABS */}
-      <div className="mb-6 border-b border-[#EDE4DB]">
+      <div className="mb-6 border-b border-border">
         <nav className="flex space-x-2 sm:space-x-6 overflow-x-auto no-scrollbar">
           {[
             { id: 'budget', label: 'Budget' },
@@ -285,8 +276,8 @@ export default function PlanState({
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                   isActive
-                    ? 'border-[#D9695F] text-[#D9695F]'
-                    : 'border-transparent text-[#6E6A78] hover:text-[#2B2A33] hover:border-[#EDE4DB]'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-text-muted hover:text-text hover:border-border'
                 }`}
               >
                 {tab.label}
@@ -338,10 +329,10 @@ export default function PlanState({
       </div>
 
       {/* 6. REFINE WITH AI (Docked at BOTTOM of plan, in line with content) */}
-      <div className="p-5 sm:p-6 rounded-[20px] bg-white border border-[#EDE4DB] shadow-[0_8px_30px_rgba(91,58,87,0.06)]">
+      <div className="p-5 sm:p-6 rounded-[20px] bg-white border border-border shadow-[0_8px_30px_rgba(91,58,87,0.06)]">
         {/* 3 Quick Chips Above Input */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className="text-[11px] font-semibold text-[#6E6A78] uppercase tracking-wider mr-1">
+          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mr-1">
             Quick Refinements:
           </span>
           {[
@@ -354,7 +345,7 @@ export default function PlanState({
               type="button"
               disabled={isRefining}
               onClick={() => handleChipClick(chip.text)}
-              className="px-3 py-1.5 rounded-full bg-[#F7EFE8] hover:bg-[#F6DFDB] border border-[#EDE4DB] text-xs font-medium text-[#2B2A33] transition cursor-pointer disabled:opacity-50"
+              className="px-3 py-1.5 rounded-full bg-surface-soft hover:bg-blush border border-border text-xs font-medium text-text transition cursor-pointer disabled:opacity-50"
             >
               {chip.label}
             </button>
@@ -369,12 +360,12 @@ export default function PlanState({
             onChange={(e) => setRefineInput(e.target.value)}
             disabled={isRefining}
             placeholder="Ask AI to change anything (e.g. swap live band for DJ, add halal catering)..."
-            className="w-full py-3 pl-4 pr-24 rounded-xl bg-[#FBF8F3] border border-[#EDE4DB] focus:border-[#D9695F] focus:ring-2 focus:ring-[#F6DFDB] text-xs sm:text-sm text-[#2B2A33] placeholder:text-[#6E6A78]/70 outline-none transition"
+            className="w-full py-3 pl-4 pr-24 rounded-xl bg-bg border-border focus:border-primary focus:ring-2 focus:ring-blush text-xs sm:text-sm text-text placeholder:text-text-muted/70 outline-none transition"
           />
           <button
             type="submit"
             disabled={!refineInput.trim() || isRefining}
-            className="absolute right-2 px-4 py-1.5 rounded-lg bg-[#D9695F] hover:bg-[#B9524A] text-white text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1 shadow-2xs"
+            className="absolute right-2 px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1 shadow-2xs"
           >
             {isRefining ? (
               <span>Updating...</span>

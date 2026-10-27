@@ -18,19 +18,19 @@ export default function SettingsModal({ isOpen, onClose, apiKey, onSaveApiKey })
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#2B2A33]/40 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl border border-[#EDE4DB] shadow-[0_16px_40px_rgba(91,58,87,0.15)] max-w-md w-full overflow-hidden animate-scale-up">
+    <div className="fixed inset-0 z-50 bg-text/40 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl border border-border shadow-[0_16px_40px_rgba(91,58,87,0.15)] max-w-md w-full overflow-hidden animate-scale-up">
         {/* Header */}
-        <div className="p-5 border-b border-[#EDE4DB] flex items-center justify-between bg-[#FBF8F3]">
+        <div className="p-5 border-b border-border flex items-center justify-between bg-bg">
           <div className="flex items-center gap-2">
-            <Key className="w-5 h-5 text-[#D9695F]" />
-            <h3 className="font-serif text-xl font-bold text-[#2B2A33]">
+            <Key className="w-5 h-5 text-primary" />
+            <h3 className="font-serif text-xl font-bold text-text">
               GenAI Engine Settings
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-[#6E6A78] hover:text-[#2B2A33] hover:bg-[#F7EFE8] transition"
+            className="p-1 rounded-lg text-text-muted hover:text-text hover:bg-surface-soft transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -39,7 +39,7 @@ export default function SettingsModal({ isOpen, onClose, apiKey, onSaveApiKey })
         {/* Form */}
         <form onSubmit={handleSave} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#6E6A78] mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-1.5">
               Gemini API Key (Optional)
             </label>
             <input
@@ -47,16 +47,16 @@ export default function SettingsModal({ isOpen, onClose, apiKey, onSaveApiKey })
               value={keyInput}
               onChange={(e) => setKeyInput(e.target.value)}
               placeholder="AIzaSy..."
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F7EFE8]/60 border border-[#EDE4DB] focus:border-[#D9695F] text-sm text-[#2B2A33] outline-none font-mono"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-surface-soft/60 border border-border focus:border-primary text-sm text-text outline-none font-mono"
             />
-            <p className="text-[11px] text-[#6E6A78] mt-1.5 leading-relaxed">
+            <p className="text-[11px] text-text-muted mt-1.5 leading-relaxed">
               If left blank or unset, PlanPilot seamlessly runs in <strong>Smart Template Mode</strong> using built-in deterministic planning rules with exact 100% budget math.
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#F7EFE8]/40 border border-[#EDE4DB] text-xs text-[#6E6A78] space-y-1">
-            <div className="font-semibold text-[#2B2A33] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#C9A25B]" />
+          <div className="p-3.5 rounded-xl bg-surface-soft/40 border border-border text-xs text-text-muted space-y-1">
+            <div className="font-semibold text-text flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-accent-gold" />
               <span>How Gemini API is called:</span>
             </div>
             <p>
@@ -68,13 +68,13 @@ export default function SettingsModal({ isOpen, onClose, apiKey, onSaveApiKey })
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-white border border-[#EDE4DB] text-xs font-medium text-[#2B2A33] hover:bg-[#F7EFE8] transition"
+              className="px-4 py-2 rounded-xl bg-white border border-border text-xs font-medium text-text hover:bg-surface-soft transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-[#D9695F] hover:bg-[#B9524A] text-white text-xs font-semibold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-semibold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
             >
               {savedSuccess ? (
                 <>
