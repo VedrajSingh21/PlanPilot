@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #FBF8F3;
+  --color-surface: #FFFFFF;
+  --color-surface-soft: #F7EFE8;
+  --color-blush: #F6DFDB;
+  --color-sage: #DCE8DA;
+  --color-primary: #D9695F;
+  --color-primary-dark: #B9524A;
+  --color-accent-gold: #C9A25B;
+  --color-plum: #5B3A57;
+  --color-text: #2B2A33;
+  --color-text-muted: #6E6A78;
+  --color-border: #EDE4DB;
+  --font-serif: 'Fraunces', serif;
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+:root {
+  --bg: #FBF8F3;
+  --surface: #FFFFFF;
+  --surface-soft: #F7EFE8;
+  --blush: #F6DFDB;
+  --sage: #DCE8DA;
+  --primary: #D9695F;
+  --primary-dark: #B9524A;
+  --accent-gold: #C9A25B;
+  --plum: #5B3A57;
+  --text: #2B2A33;
+  --text-muted: #6E6A78;
+  --border: #EDE4DB;
+  --shadow-soft: 0 8px 30px rgba(91, 58, 87, 0.08);
+  --shadow-card: 0 4px 20px rgba(91, 58, 87, 0.05);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  background-image: 
+    radial-gradient(circle at 10% 5%, rgba(246, 223, 219, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 90% 12%, rgba(247, 239, 232, 0.8) 0%, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(220, 232, 218, 0.4) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4, .font-serif-heading {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
+/* Print Stylesheet: Clean, no UI chrome, pure print beauty */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #2B2A33 !important;
+  }
+  .no-print, header, nav, .print-hide, button, .chat-drawer, .sticky-summary {
+    display: none !important;
+  }
+  .print-card {
+    box-shadow: none !important;
+    border: 1px solid #EDE4DB !important;
+    page-break-inside: avoid;
+    margin-bottom: 1.5rem !important;
+    padding: 1.5rem !important;
+  }
+  .budget-table th, .budget-table td {
+    border-color: #EDE4DB !important;
+  }
+}
